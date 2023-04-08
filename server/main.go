@@ -103,10 +103,10 @@ func (s *Server) ServeConn(conn io.ReadWriteCloser) {
 
 func (s *Server) MakeResponse(req *Request) ([]byte, error) {
 	if req.Proto != "HTTP/1.0" && req.Proto != "HTTP/1.1" {
-		return nil, errors.New("sw-exp-resplen: unsupported protocol")
+		return nil, errors.New("sw-test-resplen: unsupported protocol")
 	}
 	if req.N < 0 {
-		return nil, errors.New("sw-exp-resplen: length less than zero")
+		return nil, errors.New("sw-test-resplen: length less than zero")
 	}
 
 	buf := new(bytes.Buffer)
@@ -128,12 +128,12 @@ func ReadRequest(b *bufio.Reader) (*Request, error) {
 	}
 
 	if httpreq.URL.Path != "/" {
-		return nil, errors.New("sw-exp-resplen: invalid url path")
+		return nil, errors.New("sw-test-resplen: invalid url path")
 	}
 
 	t := httpreq.URL.Query().Get("n")
 	if t == "" {
-		return nil, errors.New("sw-exp-resplen: length not specified")
+		return nil, errors.New("sw-test-resplen: length not specified")
 	}
 
 	n, err := strconv.ParseInt(t, 10, 64)
@@ -141,7 +141,7 @@ func ReadRequest(b *bufio.Reader) (*Request, error) {
 		return nil, err
 	}
 	if n < 0 {
-		return nil, errors.New("sw-exp-resplen: length less than zero")
+		return nil, errors.New("sw-test-resplen: length less than zero")
 	}
 
 	req := &Request{

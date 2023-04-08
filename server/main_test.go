@@ -40,7 +40,7 @@ func TestServerServeConn(t *testing.T) {
 			req:      makeRequest("/a?n=0"),
 			writeErr: nil,
 			respLen:  0,
-			log:      "error: sw-exp-resplen: invalid url path\n",
+			log:      "error: sw-test-resplen: invalid url path\n",
 		},
 		{
 			req:      makeRequest("/?n=0"),
