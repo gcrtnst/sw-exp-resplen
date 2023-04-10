@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"errors"
 	"flag"
 	"io"
@@ -88,7 +87,7 @@ func (s *Server) ServeConn(conn io.ReadWriteCloser) {
 		return
 	}
 
-	resp, err := s.MakeResponse(req)
+	resp, err := MakeResponse(req)
 	if err != nil {
 		panic(err)
 	}
@@ -101,18 +100,9 @@ func (s *Server) ServeConn(conn io.ReadWriteCloser) {
 	}
 }
 
-func (s *Server) MakeResponse(req *Request) ([]byte, error) {
-	if req.Proto != "HTTP/1.0" && req.Proto != "HTTP/1.1" {
-		return nil, errors.New("sw-test-resplen: unsupported protocol")
-	}
-	if req.N < 0 {
-		return nil, errors.New("sw-test-resplen: length less than zero")
-	}
-
-	buf := new(bytes.Buffer)
-	_, _ = buf.WriteString(req.Proto + " 200 \r\n\r\n")
-	_, _ = io.CopyN(buf, s.Rand, int64(req.N))
-	return buf.Bytes(), nil
+type Request struct {
+	Proto string
+	N     int
 }
 
 const MaxN = 1 << 30 // 1 GiB
@@ -153,9 +143,22 @@ func ReadRequest(b *bufio.Reader) (*Request, error) {
 	return req, nil
 }
 
-type Request struct {
-	Proto string
-	N     int
+func MakeResponse(req *Request) ([]byte, error) {
+	if req.Proto != "HTTP/1.0" && req.Proto != "HTTP/1.1" {
+		return nil, errors.New("sw-test-resplen: unsupported protocol")
+	}
+	if req.N < 0 || MaxN < req.N {
+		return nil, errors.New("sw-test-resplen: invalid length")
+	}
+
+	start := req.Proto + " 200 \r\n\r\n"
+	rlen := len(start) + req.N // no overflow due to small MaxN
+	resp := make([]byte, rlen)
+	copy(resp, []byte(start))
+	for i := len(start); i < len(resp); i++ {
+		resp[i] = ' '
+	}
+	return resp, nil
 }
 
 type SyncRand struct {

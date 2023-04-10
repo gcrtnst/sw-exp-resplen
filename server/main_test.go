@@ -83,72 +83,6 @@ func TestServerServeConn(t *testing.T) {
 	}
 }
 
-func TestServerMakeResponseFormat(t *testing.T) {
-	re := regexp.MustCompile(`\A` + regexp.QuoteMeta("HTTP/1.0 200 \r\n\r\n") + `(?P<body>.*)\z`)
-
-	tt := []int{0, 1, 255}
-	for ti, reqN := range tt {
-		req := &Request{Proto: "HTTP/1.0", N: reqN}
-
-		srv := NewServer(1)
-		resp, err := srv.MakeResponse(req)
-		if err != nil {
-			t.Errorf("case %d: %v", ti, err)
-			continue
-		}
-
-		matches := re.FindSubmatch(resp)
-		if matches == nil {
-			t.Errorf("case %d: invalid response format", ti)
-			continue
-		}
-
-		respN := len(matches[re.SubexpIndex("body")])
-		if respN != reqN {
-			t.Errorf("case %d: response body length: expected %d, got %d", ti, reqN, respN)
-			continue
-		}
-	}
-}
-
-func TestServerMakeResponseNormal(t *testing.T) {
-	tt := []*Request{
-		{Proto: "HTTP/1.0", N: 0},
-		{Proto: "HTTP/1.1", N: 0},
-	}
-
-	for ti, req := range tt {
-		srv := NewServer(1)
-		resp, err := srv.MakeResponse(req)
-
-		if resp == nil {
-			t.Errorf("case %d: resp is nil", ti)
-		}
-		if err != nil {
-			t.Errorf("case %d: %v", ti, err)
-		}
-	}
-}
-
-func TestServerMakeResponseError(t *testing.T) {
-	tt := []*Request{
-		{Proto: "HTTP/2.0", N: 0},
-		{Proto: "HTTP/1.0", N: -1},
-	}
-
-	for ti, req := range tt {
-		srv := NewServer(1)
-		resp, err := srv.MakeResponse(req)
-
-		if resp != nil {
-			t.Errorf("case %d: resp is not nil", ti)
-		}
-		if err == nil {
-			t.Errorf("case %d: no error", ti)
-		}
-	}
-}
-
 func TestReadRequestNormal(t *testing.T) {
 	tt := []struct {
 		raw string
@@ -220,6 +154,71 @@ func TestReadRequestError(t *testing.T) {
 		if err == nil {
 			t.Errorf("case %d: no error", ti)
 			continue
+		}
+	}
+}
+
+func TestMakeResponseFormat(t *testing.T) {
+	re := regexp.MustCompile(`\A` + regexp.QuoteMeta("HTTP/1.0 200 \r\n\r\n") + `(?P<body> *)\z`)
+
+	tt := []int{0, 1, 255}
+	for ti, reqN := range tt {
+		req := &Request{Proto: "HTTP/1.0", N: reqN}
+
+		resp, err := MakeResponse(req)
+		if err != nil {
+			t.Errorf("case %d: %v", ti, err)
+			continue
+		}
+
+		matches := re.FindSubmatch(resp)
+		if matches == nil {
+			t.Errorf("case %d: invalid response format", ti)
+			continue
+		}
+
+		respN := len(matches[re.SubexpIndex("body")])
+		if respN != reqN {
+			t.Errorf("case %d: response body length: expected %d, got %d", ti, reqN, respN)
+			continue
+		}
+	}
+}
+
+func TestMakeResponseNormal(t *testing.T) {
+	tt := []*Request{
+		{Proto: "HTTP/1.0", N: 0},
+		{Proto: "HTTP/1.1", N: 0},
+		//{Proto: "HTTP/1.0", N: MaxN},	// skipped due to high memory consumption
+	}
+
+	for ti, req := range tt {
+		resp, err := MakeResponse(req)
+
+		if resp == nil {
+			t.Errorf("case %d: resp is nil", ti)
+		}
+		if err != nil {
+			t.Errorf("case %d: %v", ti, err)
+		}
+	}
+}
+
+func TestMakeResponseError(t *testing.T) {
+	tt := []*Request{
+		{Proto: "HTTP/2.0", N: 0},
+		{Proto: "HTTP/1.0", N: -1},
+		{Proto: "HTTP/1.0", N: MaxN + 1},
+	}
+
+	for ti, req := range tt {
+		resp, err := MakeResponse(req)
+
+		if resp != nil {
+			t.Errorf("case %d: resp is not nil", ti)
+		}
+		if err == nil {
+			t.Errorf("case %d: no error", ti)
 		}
 	}
 }
