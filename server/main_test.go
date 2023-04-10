@@ -62,7 +62,7 @@ func TestServerServeConn(t *testing.T) {
 		logbuf := new(strings.Builder)
 		logger := log.New(logbuf, "", 0)
 
-		srv := NewServer(1)
+		srv := NewServer()
 		srv.Logger = logger
 
 		srv.ServeConn(conn)

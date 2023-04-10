@@ -6,12 +6,10 @@ import (
 	"flag"
 	"io"
 	"log"
-	"math/rand"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
-	"sync"
 )
 
 func main() {
@@ -21,7 +19,6 @@ func main() {
 
 func run() int {
 	port := flag.Int("port", 0, "listen port")
-	seed := flag.Int64("seed", 1, "seed value")
 	flag.Parse()
 
 	addr := &net.TCPAddr{
@@ -41,7 +38,7 @@ func run() int {
 	}()
 	log.Printf("listening on %s", lis.Addr().String())
 
-	srv := NewServer(*seed)
+	srv := NewServer()
 	err = srv.Accept(lis)
 	if err != nil {
 		panic(err)
@@ -51,13 +48,11 @@ func run() int {
 }
 
 type Server struct {
-	Rand   *SyncRand
 	Logger *log.Logger
 }
 
-func NewServer(seed int64) *Server {
+func NewServer() *Server {
 	return &Server{
-		Rand:   NewSyncRand(seed),
 		Logger: log.Default(),
 	}
 }
@@ -159,21 +154,4 @@ func MakeResponse(req *Request) ([]byte, error) {
 		resp[i] = ' '
 	}
 	return resp, nil
-}
-
-type SyncRand struct {
-	mu  sync.Mutex
-	rng *rand.Rand
-}
-
-func NewSyncRand(seed int64) *SyncRand {
-	src := rand.NewSource(seed)
-	rng := rand.New(src)
-	return &SyncRand{rng: rng}
-}
-
-func (r *SyncRand) Read(p []byte) (int, error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	return r.rng.Read(p)
 }
