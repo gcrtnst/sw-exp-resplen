@@ -49,13 +49,15 @@ function httpReply(port, req, resp)
             (
                 "error: response length mismatch\n" ..
                 "expected_body_len=%d\n" ..
-                "received_body_len=%d\n" ..
-                "received_body=%q"
+                "received_body_len=%d"
             ),
             g_len,
-            #resp,
-            resp
+            #resp
         )
+        if #resp < 64 then
+            msg = string.format("%s\nreceived_body=%q", msg, resp)
+        end
+
         server.announce(c_annouce_name, msg)
         g_active = false
         g_port = nil

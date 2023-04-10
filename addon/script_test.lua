@@ -423,6 +423,51 @@ function test_decl.testHttpReply(t)
             },
         },
         {
+            in_g_active = true,
+            in_g_port = 52149,
+            in_g_len = 0,
+            in_g_req = "/?n=0",
+            in_port = 52149,
+            in_req = "/?n=0",
+            in_resp = "123456789012345678901234567890123456789012345678901234567890123",    -- !
+            want_g_active = false,
+            want_g_port = nil,
+            want_g_len = nil,
+            want_g_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: response length mismatch\n" ..
+                        "expected_body_len=0\n" ..
+                        "received_body_len=63\n" ..
+                        "received_body=\"123456789012345678901234567890123456789012345678901234567890123\"",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_g_active = true,
+            in_g_port = 52149,
+            in_g_len = 0,
+            in_g_req = "/?n=0",
+            in_port = 52149,
+            in_req = "/?n=0",
+            in_resp = "1234567890123456789012345678901234567890123456789012345678901234",   -- !
+            want_g_active = false,
+            want_g_port = nil,
+            want_g_len = nil,
+            want_g_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: response length mismatch\n" ..
+                        "expected_body_len=0\n" ..
+                        "received_body_len=64",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
             in_g_active = false,    -- !
             in_g_port = 52149,
             in_g_len = 0,
