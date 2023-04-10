@@ -175,6 +175,13 @@ func TestReadRequestNormal(t *testing.T) {
 				N:     255,
 			},
 		},
+		{
+			raw: makeRequest("/?n=1073741824"),
+			req: &Request{
+				Proto: "HTTP/1.1",
+				N:     1073741824,
+			},
+		},
 	}
 
 	for ti, tc := range tt {
@@ -199,6 +206,7 @@ func TestReadRequestError(t *testing.T) {
 		makeRequest("/?l=0"),
 		makeRequest("/?n=a"),
 		makeRequest("/?n=-1"),
+		makeRequest("/?n=1073741825"),
 	}
 
 	for ti, raw := range tt {

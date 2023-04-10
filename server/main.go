@@ -115,6 +115,8 @@ func (s *Server) MakeResponse(req *Request) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+const MaxN = 1 << 30 // 1 GiB
+
 func ReadRequest(b *bufio.Reader) (*Request, error) {
 	// assuming HTTP/1.x
 	httpreq, err := http.ReadRequest(b)
@@ -140,8 +142,8 @@ func ReadRequest(b *bufio.Reader) (*Request, error) {
 	if err != nil {
 		return nil, err
 	}
-	if n < 0 {
-		return nil, errors.New("sw-test-resplen: length less than zero")
+	if n < 0 || MaxN < n {
+		return nil, errors.New("sw-test-resplen: invalid length")
 	}
 
 	req := &Request{
