@@ -111,7 +111,7 @@ func (s *Server) MakeResponse(req *Request) ([]byte, error) {
 
 	buf := new(bytes.Buffer)
 	_, _ = buf.WriteString(req.Proto + " 200 \r\n\r\n")
-	_, _ = io.CopyN(buf, s.Rand, req.N)
+	_, _ = io.CopyN(buf, s.Rand, int64(req.N))
 	return buf.Bytes(), nil
 }
 
@@ -136,7 +136,7 @@ func ReadRequest(b *bufio.Reader) (*Request, error) {
 		return nil, errors.New("sw-test-resplen: length not specified")
 	}
 
-	n, err := strconv.ParseInt(t, 10, 64)
+	n, err := strconv.ParseInt(t, 10, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -146,14 +146,14 @@ func ReadRequest(b *bufio.Reader) (*Request, error) {
 
 	req := &Request{
 		Proto: httpreq.Proto,
-		N:     n,
+		N:     int(n),
 	}
 	return req, nil
 }
 
 type Request struct {
 	Proto string
-	N     int64
+	N     int
 }
 
 type SyncRand struct {

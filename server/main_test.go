@@ -86,7 +86,7 @@ func TestServerServeConn(t *testing.T) {
 func TestServerMakeResponseFormat(t *testing.T) {
 	re := regexp.MustCompile(`\A` + regexp.QuoteMeta("HTTP/1.0 200 \r\n\r\n") + `(?P<body>.*)\z`)
 
-	tt := []int64{0, 1, 255}
+	tt := []int{0, 1, 255}
 	for ti, reqN := range tt {
 		req := &Request{Proto: "HTTP/1.0", N: reqN}
 
@@ -103,7 +103,7 @@ func TestServerMakeResponseFormat(t *testing.T) {
 			continue
 		}
 
-		respN := int64(len(matches[re.SubexpIndex("body")]))
+		respN := len(matches[re.SubexpIndex("body")])
 		if respN != reqN {
 			t.Errorf("case %d: response body length: expected %d, got %d", ti, reqN, respN)
 			continue
