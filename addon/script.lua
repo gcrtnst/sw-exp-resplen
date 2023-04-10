@@ -55,6 +55,8 @@ function httpReply(port, req, resp)
             #resp
         )
         if #resp < 64 then
+            -- Assume that resp contains only printable ASCII characters.
+            -- Otherwise server.announce will print nothing (not even error messages).
             msg = string.format("%s\nreceived_body=%q", msg, resp)
         end
 
