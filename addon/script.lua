@@ -44,13 +44,21 @@ function httpReply(port, req, resp)
     end
     g_req = nil
 
+    local err = nil
     if #resp ~= g_len then
+        err = "response length mismatch"
+    end
+    if string.match(resp, "^ *$") == nil then
+        err = "response content mismatch"
+    end
+    if err ~= nil then
         local msg = string.format(
             (
-                "error: response length mismatch\n" ..
+                "error: %s\n" ..
                 "expected_body_len=%d\n" ..
                 "received_body_len=%d"
             ),
+            err,
             g_len,
             #resp
         )
