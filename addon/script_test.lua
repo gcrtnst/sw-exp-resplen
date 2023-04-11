@@ -324,7 +324,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=1", -- !
             in_port = 52149,
             in_req = "/?n=1",   -- !
-            in_resp = " ",      -- !
+            in_resp = ".",      -- !
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 2,
@@ -344,7 +344,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=16",            -- !
             in_port = 52149,
             in_req = "/?n=16",              -- !
-            in_resp = "                ",   -- !
+            in_resp = "................",   -- !
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 17,
@@ -406,7 +406,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
-            in_resp = " ",  -- !
+            in_resp = ".",  -- !
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
@@ -417,7 +417,7 @@ function test_decl.testHttpReply(t)
                     message = "error: response length mismatch\n" ..
                         "expected_body_len=0\n" ..
                         "received_body_len=1\n" ..
-                        "received_body=\" \"",
+                        "received_body=\".\"",
                     peer_id = nil,
                 },
             },
@@ -429,7 +429,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
-            in_resp = "                                                               ",    -- !
+            in_resp = "...............................................................",    -- !
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
@@ -440,7 +440,7 @@ function test_decl.testHttpReply(t)
                     message = "error: response length mismatch\n" ..
                         "expected_body_len=0\n" ..
                         "received_body_len=63\n" ..
-                        "received_body=\"                                                               \"",
+                        "received_body=\"...............................................................\"",
                     peer_id = nil,
                 },
             },
@@ -452,7 +452,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
-            in_resp = "                                                                ",   -- !
+            in_resp = "................................................................",   -- !
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
@@ -474,7 +474,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=3", -- !
             in_port = 52149,
             in_req = "/?n=3",   -- !
-            in_resp = "+  ",    -- !
+            in_resp = "+..",    -- !
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
@@ -485,7 +485,7 @@ function test_decl.testHttpReply(t)
                     message = "error: response content mismatch\n" ..
                         "expected_body_len=3\n" ..
                         "received_body_len=3\n" ..
-                        "received_body=\"+  \"",
+                        "received_body=\"+..\"",
                     peer_id = nil,
                 },
             },
@@ -497,7 +497,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=3", -- !
             in_port = 52149,
             in_req = "/?n=3",   -- !
-            in_resp = "  +",    -- !
+            in_resp = "..+",    -- !
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
@@ -508,7 +508,7 @@ function test_decl.testHttpReply(t)
                     message = "error: response content mismatch\n" ..
                         "expected_body_len=3\n" ..
                         "received_body_len=3\n" ..
-                        "received_body=\"  +\"",
+                        "received_body=\"..+\"",
                     peer_id = nil,
                 },
             },
@@ -520,7 +520,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
-            in_resp = " ",          -- !
+            in_resp = ".",          -- !
             want_g_active = false,
             want_g_port = 52149,
             want_g_len = 0,
@@ -534,7 +534,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=0",
             in_port = 52150,    -- !
             in_req = "/?n=0",
-            in_resp = " ",      -- !
+            in_resp = ".",      -- !
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 0,
@@ -548,7 +548,7 @@ function test_decl.testHttpReply(t)
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=1",   -- !
-            in_resp = " ",      -- !
+            in_resp = ".",      -- !
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 0,

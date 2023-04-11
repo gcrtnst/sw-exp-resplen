@@ -159,7 +159,7 @@ func TestReadRequestError(t *testing.T) {
 }
 
 func TestMakeResponseFormat(t *testing.T) {
-	re := regexp.MustCompile(`\A` + regexp.QuoteMeta("HTTP/1.0 200 \r\n\r\n") + `(?P<body> *)\z`)
+	re := regexp.MustCompile(`\A` + regexp.QuoteMeta("HTTP/1.0 200 \r\n\r\n") + `(?P<body>\.*)\z`)
 
 	tt := []int{0, 1, 255}
 	for ti, reqN := range tt {

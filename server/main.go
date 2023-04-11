@@ -151,7 +151,7 @@ func MakeResponse(req *Request) ([]byte, error) {
 	resp := make([]byte, rlen)
 	copy(resp, []byte(start))
 	for i := len(start); i < len(resp); i++ {
-		resp[i] = ' '
+		resp[i] = '.'
 	}
 	return resp, nil
 }

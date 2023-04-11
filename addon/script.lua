@@ -48,7 +48,7 @@ function httpReply(port, req, resp)
     if #resp ~= g_len then
         err = "response length mismatch"
     end
-    if string.match(resp, "^ *$") == nil then
+    if string.match(resp, "^%.*$") == nil then
         err = "response content mismatch"
     end
     if err ~= nil then
