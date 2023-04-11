@@ -22,19 +22,19 @@ func TestServerServeConn(t *testing.T) {
 			req:      makeRequest("/?n=0"),
 			writeErr: nil,
 			respLen:  17,
-			log:      "resp_size=17, body_size=0\n",
+			log:      "resp_len=17, body_len=0\n",
 		},
 		{
 			req:      makeRequest("/?n=1"),
 			writeErr: nil,
 			respLen:  18,
-			log:      "resp_size=18, body_size=1\n",
+			log:      "resp_len=18, body_len=1\n",
 		},
 		{
 			req:      makeRequest("/?n=255"),
 			writeErr: nil,
 			respLen:  272,
-			log:      "resp_size=272, body_size=255\n",
+			log:      "resp_len=272, body_len=255\n",
 		},
 		{
 			req:      makeRequest("/a?n=0"),
@@ -46,7 +46,7 @@ func TestServerServeConn(t *testing.T) {
 			req:      makeRequest("/?n=0"),
 			writeErr: errors.New("testing write error"),
 			respLen:  17,
-			log: "resp_size=17, body_size=0\n" +
+			log: "resp_len=17, body_len=0\n" +
 				"error: testing write error\n",
 		},
 	}

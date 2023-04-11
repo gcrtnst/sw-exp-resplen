@@ -86,7 +86,7 @@ func (s *Server) ServeConn(conn io.ReadWriteCloser) {
 	if err != nil {
 		panic(err)
 	}
-	s.Logger.Printf("resp_size=%d, body_size=%d", len(resp), req.N)
+	s.Logger.Printf("resp_len=%d, body_len=%d", len(resp), req.N)
 
 	_, err = conn.Write(resp)
 	if err != nil {
