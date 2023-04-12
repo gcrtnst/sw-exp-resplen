@@ -948,7 +948,13 @@ function test_decl.testTestNext(t)
             in_active = false,
             in_port = nil,
             in_len = nil,
-            in_limit = 1 << 30,
+            in_limit = nil,
+            in_step = nil,
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {},
             want_http_log = {},
@@ -956,8 +962,61 @@ function test_decl.testTestNext(t)
         {
             in_active = true,
             in_port = 52149,
+            in_len = 1,
+            in_limit = 1,
+            in_step = 1,
+            want_active = true,
+            want_port = 52149,
+            want_len = 1,
+            want_limit = 1,
+            want_step = 1,
+            want_req = "/?n=1",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=1",
+                    peer_id = nil,
+                },
+            },
+            want_http_log = {
+                {
+                    port = 52149,
+                    request = "/?n=1",
+                },
+            },
+        },
+        {
+            in_active = true,
+            in_port = 52149,
+            in_len = 2,
+            in_limit = 1,
+            in_step = 1,
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
+            want_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "done",
+                    peer_id = nil,
+                },
+            },
+            want_http_log = {},
+        },
+        {
+            in_active = true,
+            in_port = 52149,
             in_len = 0,
             in_limit = 1 << 30,
+            in_step = 1,
+            want_active = true,
+            want_port = 52149,
+            want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1,
             want_req = "/?n=0",
             want_announce_log = {
                 {
@@ -978,6 +1037,12 @@ function test_decl.testTestNext(t)
             in_port = 52149,
             in_len = 1,
             in_limit = 1 << 30,
+            in_step = 1,
+            want_active = true,
+            want_port = 52149,
+            want_len = 1,
+            want_limit = 1 << 30,
+            want_step = 1,
             want_req = "/?n=1",
             want_announce_log = {
                 {
@@ -998,6 +1063,12 @@ function test_decl.testTestNext(t)
             in_port = 52149,
             in_len = 255,
             in_limit = 1 << 30,
+            in_step = 1,
+            want_active = true,
+            want_port = 52149,
+            want_len = 255,
+            want_limit = 1 << 30,
+            want_step = 1,
             want_req = "/?n=255",
             want_announce_log = {
                 {
@@ -1022,11 +1093,16 @@ function test_decl.testTestNext(t)
         t.env.g_port = tc.in_port
         t.env.g_len = tc.in_len
         t.env.g_limit = tc.in_limit
-        t.env.g_step = 1
+        t.env.g_step = tc.in_step
         t.env.g_req = nil
 
         t.env.testNext()
 
+        assertEqual(tc.want_active, t.env.g_active)
+        assertEqual(tc.want_port, t.env.g_port)
+        assertEqual(tc.want_len, t.env.g_len)
+        assertEqual(tc.want_limit, t.env.g_limit)
+        assertEqual(tc.want_step, t.env.g_step)
         assertEqual(tc.want_req, t.env.g_req)
         assertEqual(tc.want_announce_log, t.env.server._announce_log)
         assertEqual(tc.want_http_log, t.env.server._http_log)

@@ -113,6 +113,12 @@ function testNext()
         return
     end
 
+    if g_len > g_limit then
+        server.announce(c_annouce_name, "done")
+        testStop()
+        return
+    end
+
     local req = string.format("/?n=%d", g_len)
     server.httpGet(g_port, req)
     g_req = req
