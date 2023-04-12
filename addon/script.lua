@@ -100,11 +100,7 @@ function httpReply(port, req, resp)
         end
 
         server.announce(c_annouce_name, msg)
-        g_active = false
-        g_port = nil
-        g_len = nil
-        g_limit = nil
-        g_step = nil
+        testStop()
         return
     end
 
@@ -122,4 +118,12 @@ function httpGet()
     g_req = req
 
     server.announce(c_annouce_name, string.format("body_len=%d", g_len))
+end
+
+function testStop()
+    g_active = false
+    g_port = nil
+    g_len = nil
+    g_limit = nil
+    g_step = nil
 end
