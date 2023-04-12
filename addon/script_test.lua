@@ -92,6 +92,168 @@ function test_decl.testOnCustomCommand(t)
             want_active = true,
             want_port = 52149,
             want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1,
+            want_req = "/?n=0",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=0",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"1"},    -- !
+            want_active = true,
+            want_port = 1,
+            want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1,
+            want_req = "/?n=0",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=0",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"65535"},    -- !
+            want_active = true,
+            want_port = 65535,
+            want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1,
+            want_req = "/?n=0",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=0",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "1"},   -- !
+            want_active = true,
+            want_port = 52149,
+            want_len = 1,
+            want_limit = 1 << 30,
+            want_step = 1,
+            want_req = "/?n=1",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=1",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0"},
+            want_active = true,
+            want_port = 52149,
+            want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1,
+            want_req = "/?n=0",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=0",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "1073741824"}, -- !
+            want_active = true,
+            want_port = 52149,
+            want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1,
+            want_req = "/?n=0",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=0",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "0"},  -- !
+            want_active = true,
+            want_port = 52149,
+            want_len = 0,
+            want_limit = 0,
+            want_step = 1,
+            want_req = "/?n=0",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=0",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "1073741824", "1024"}, -- !
+            want_active = true,
+            want_port = 52149,
+            want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1 << 10,
+            want_req = "/?n=0",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=0",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "1073741824", "1"},    -- !
+            want_active = true,
+            want_port = 52149,
+            want_len = 0,
+            want_limit = 1 << 30,
+            want_step = 1,
             want_req = "/?n=0",
             want_announce_log = {
                 {
@@ -110,6 +272,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {},
         },
@@ -122,6 +286,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {},
         },
@@ -134,6 +300,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {
                 {
@@ -148,10 +316,12 @@ function test_decl.testOnCustomCommand(t)
             in_user_peer_id = 0,
             in_admin = true,
             in_cmd = "?test",
-            in_args = {"52149", ""},    -- !
+            in_args = {"52149", "0", "1073741824", "1", ""},    -- !
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {
                 {
@@ -170,6 +340,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {
                 {
@@ -188,6 +360,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {
                 {
@@ -206,6 +380,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {
                 {
@@ -216,6 +392,127 @@ function test_decl.testOnCustomCommand(t)
             },
         },
         {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0.0"}, -- !
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
+            want_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: invalid start number",
+                    peer_id = 0,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "-1"},  -- !
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
+            want_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: invalid start number",
+                    peer_id = 0,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "1073741824.0"},   -- !
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
+            want_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: invalid limit number",
+                    peer_id = 0,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "-1"}, -- !
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
+            want_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: invalid limit number",
+                    peer_id = 0,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "1073741824", "1.0"},  -- !
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
+            want_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: invalid step number",
+                    peer_id = 0,
+                },
+            },
+        },
+        {
+            in_active = false,
+            in_user_peer_id = 0,
+            in_admin = true,
+            in_cmd = "?test",
+            in_args = {"52149", "0", "1073741824", "0"},    -- !
+            want_active = false,
+            want_port = nil,
+            want_len = nil,
+            want_limit = nil,
+            want_step = nil,
+            want_req = nil,
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "error: invalid step number",
+                    peer_id = 0,
+                },
+            },
+        },
+
+        {
             in_active = true,   -- !
             in_user_peer_id = 0,
             in_admin = true,
@@ -224,6 +521,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = true,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {
                 {
@@ -242,6 +541,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = false,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {
                 {
@@ -260,6 +561,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = true,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {},
         },
@@ -272,6 +575,8 @@ function test_decl.testOnCustomCommand(t)
             want_active = true,
             want_port = nil,
             want_len = nil,
+            want_limit = nil,
+            want_step = nil,
             want_req = nil,
             want_announce_log = {},
         },
@@ -290,6 +595,8 @@ function test_decl.testOnCustomCommand(t)
         assertEqual(tc.want_active, t.env.g_active)
         assertEqual(tc.want_port, t.env.g_port)
         assertEqual(tc.want_len, t.env.g_len)
+        assertEqual(tc.want_limit, t.env.g_limit)
+        assertEqual(tc.want_step, t.env.g_step)
         assertEqual(tc.want_req, t.env.g_req)
         assertEqual(tc.want_announce_log, t.env.server._announce_log)
     end
@@ -301,6 +608,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
@@ -308,6 +617,8 @@ function test_decl.testHttpReply(t)
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 1,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=1",
             want_announce_log = {
                 {
@@ -321,6 +632,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 1,       -- !
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=1", -- !
             in_port = 52149,
             in_req = "/?n=1",   -- !
@@ -328,6 +641,8 @@ function test_decl.testHttpReply(t)
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 2,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=2",
             want_announce_log = {
                 {
@@ -341,6 +656,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 16,                  -- !
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=16",            -- !
             in_port = 52149,
             in_req = "/?n=16",              -- !
@@ -348,6 +665,8 @@ function test_decl.testHttpReply(t)
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 17,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=17",
             want_announce_log = {
                 {
@@ -361,6 +680,8 @@ function test_decl.testHttpReply(t)
             in_g_active = false,    -- !
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
@@ -368,6 +689,8 @@ function test_decl.testHttpReply(t)
             want_g_active = false,
             want_g_port = 52149,
             want_g_len = 0,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=0",
             want_announce_log = {},
         },
@@ -375,6 +698,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52150,    -- !
             in_req = "/?n=0",
@@ -382,6 +707,8 @@ function test_decl.testHttpReply(t)
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 0,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=0",
             want_announce_log = {},
         },
@@ -389,6 +716,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=1",   -- !
@@ -396,6 +725,8 @@ function test_decl.testHttpReply(t)
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 0,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=0",
             want_announce_log = {},
         },
@@ -403,6 +734,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
@@ -410,6 +743,8 @@ function test_decl.testHttpReply(t)
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
+            want_g_limit = nil,
+            want_g_step = nil,
             want_g_req = nil,
             want_announce_log = {
                 {
@@ -426,6 +761,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
@@ -433,6 +770,8 @@ function test_decl.testHttpReply(t)
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
+            want_g_limit = nil,
+            want_g_step = nil,
             want_g_req = nil,
             want_announce_log = {
                 {
@@ -449,6 +788,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
@@ -456,6 +797,8 @@ function test_decl.testHttpReply(t)
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
+            want_g_limit = nil,
+            want_g_step = nil,
             want_g_req = nil,
             want_announce_log = {
                 {
@@ -471,6 +814,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 3,       -- !
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=3", -- !
             in_port = 52149,
             in_req = "/?n=3",   -- !
@@ -478,6 +823,8 @@ function test_decl.testHttpReply(t)
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
+            want_g_limit = nil,
+            want_g_step = nil,
             want_g_req = nil,
             want_announce_log = {
                 {
@@ -494,6 +841,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 3,       -- !
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=3", -- !
             in_port = 52149,
             in_req = "/?n=3",   -- !
@@ -501,6 +850,8 @@ function test_decl.testHttpReply(t)
             want_g_active = false,
             want_g_port = nil,
             want_g_len = nil,
+            want_g_limit = nil,
+            want_g_step = nil,
             want_g_req = nil,
             want_announce_log = {
                 {
@@ -517,6 +868,8 @@ function test_decl.testHttpReply(t)
             in_g_active = false,    -- !
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=0",
@@ -524,6 +877,8 @@ function test_decl.testHttpReply(t)
             want_g_active = false,
             want_g_port = 52149,
             want_g_len = 0,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=0",
             want_announce_log = {},
         },
@@ -531,6 +886,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52150,    -- !
             in_req = "/?n=0",
@@ -538,6 +895,8 @@ function test_decl.testHttpReply(t)
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 0,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=0",
             want_announce_log = {},
         },
@@ -545,6 +904,8 @@ function test_decl.testHttpReply(t)
             in_g_active = true,
             in_g_port = 52149,
             in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1,
             in_g_req = "/?n=0",
             in_port = 52149,
             in_req = "/?n=1",   -- !
@@ -552,6 +913,8 @@ function test_decl.testHttpReply(t)
             want_g_active = true,
             want_g_port = 52149,
             want_g_len = 0,
+            want_g_limit = 1 << 30,
+            want_g_step = 1,
             want_g_req = "/?n=0",
             want_announce_log = {},
         },
@@ -563,6 +926,8 @@ function test_decl.testHttpReply(t)
         t.env.g_active = tc.in_g_active
         t.env.g_port = tc.in_g_port
         t.env.g_len = tc.in_g_len
+        t.env.g_limit = tc.in_g_limit
+        t.env.g_step = tc.in_g_step
         t.env.g_req = tc.in_g_req
 
         t.env.httpReply(tc.in_port, tc.in_req, tc.in_resp)
@@ -570,6 +935,8 @@ function test_decl.testHttpReply(t)
         assertEqual(tc.want_g_active, t.env.g_active)
         assertEqual(tc.want_g_port, t.env.g_port)
         assertEqual(tc.want_g_len, t.env.g_len)
+        assertEqual(tc.want_g_limit, t.env.g_limit)
+        assertEqual(tc.want_g_step, t.env.g_step)
         assertEqual(tc.want_g_req, t.env.g_req)
         assertEqual(tc.want_announce_log, t.env.server._announce_log)
     end
@@ -581,6 +948,7 @@ function test_decl.testHttpGet(t)
             in_active = false,
             in_port = nil,
             in_len = nil,
+            in_limit = 1 << 30,
             want_req = nil,
             want_announce_log = {},
             want_http_log = {},
@@ -589,6 +957,7 @@ function test_decl.testHttpGet(t)
             in_active = true,
             in_port = 52149,
             in_len = 0,
+            in_limit = 1 << 30,
             want_req = "/?n=0",
             want_announce_log = {
                 {
@@ -608,6 +977,7 @@ function test_decl.testHttpGet(t)
             in_active = true,
             in_port = 52149,
             in_len = 1,
+            in_limit = 1 << 30,
             want_req = "/?n=1",
             want_announce_log = {
                 {
@@ -627,6 +997,7 @@ function test_decl.testHttpGet(t)
             in_active = true,
             in_port = 52149,
             in_len = 255,
+            in_limit = 1 << 30,
             want_req = "/?n=255",
             want_announce_log = {
                 {
@@ -650,6 +1021,8 @@ function test_decl.testHttpGet(t)
         t.env.g_active = tc.in_active
         t.env.g_port = tc.in_port
         t.env.g_len = tc.in_len
+        t.env.g_limit = tc.in_limit
+        t.env.g_step = 1
         t.env.g_req = nil
 
         t.env.httpGet()

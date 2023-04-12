@@ -3,6 +3,8 @@ c_annouce_name = "[sw-test-resplen]"
 g_active = false
 g_port = nil
 g_len = nil
+g_limit = nil
+g_step = nil
 g_req = nil
 
 function onCustomCommand(full_message, user_peer_id, is_admin, is_auth, cmd, ...)
@@ -11,7 +13,7 @@ function onCustomCommand(full_message, user_peer_id, is_admin, is_auth, cmd, ...
     end
 
     local args = {...}
-    if #args ~= 1 then
+    if #args < 1 or 4 < #args then
         server.announce(c_annouce_name, "error: wrong number or arguments", user_peer_id)
         return
     end
@@ -20,6 +22,33 @@ function onCustomCommand(full_message, user_peer_id, is_admin, is_auth, cmd, ...
     if port == nil or port < 1 or 65535 < port then
         server.announce(c_annouce_name, "error: invalid port number", user_peer_id)
         return
+    end
+
+    local start = 0
+    if #args >= 2 then
+        start = tonumber(args[2], 10)
+        if start == nil or start < 0 then
+            server.announce(c_annouce_name, "error: invalid start number", user_peer_id)
+            return
+        end
+    end
+
+    local limit = 1 << 30   -- 1 GiB
+    if #args >= 3 then
+        limit = tonumber(args[3], 10)
+        if limit == nil or limit < 0 then
+            server.announce(c_annouce_name, "error: invalid limit number", user_peer_id)
+            return
+        end
+    end
+
+    local step = 1
+    if #args >= 4 then
+        step = tonumber(args[4], 10)
+        if step == nil or step < 1 then
+            server.announce(c_annouce_name, "error: invalid step number", user_peer_id)
+            return
+        end
     end
 
     if g_active then
@@ -34,7 +63,9 @@ function onCustomCommand(full_message, user_peer_id, is_admin, is_auth, cmd, ...
 
     g_active = true
     g_port = port
-    g_len = 0
+    g_len = start
+    g_limit = limit
+    g_step = step
     httpGet()
 end
 
@@ -72,6 +103,8 @@ function httpReply(port, req, resp)
         g_active = false
         g_port = nil
         g_len = nil
+        g_limit = nil
+        g_step = nil
         return
     end
 
