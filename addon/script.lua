@@ -66,7 +66,7 @@ function onCustomCommand(full_message, user_peer_id, is_admin, is_auth, cmd, ...
     g_len = start
     g_limit = limit
     g_step = step
-    httpGet()
+    testNext()
 end
 
 function httpReply(port, req, resp)
@@ -105,10 +105,10 @@ function httpReply(port, req, resp)
     end
 
     g_len = g_len + 1
-    httpGet()
+    testNext()
 end
 
-function httpGet()
+function testNext()
     if not g_active then
         return
     end

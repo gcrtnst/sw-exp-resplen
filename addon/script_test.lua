@@ -942,7 +942,7 @@ function test_decl.testHttpReply(t)
     end
 end
 
-function test_decl.testHttpGet(t)
+function test_decl.testTestNext(t)
     local tt = {
         {
             in_active = false,
@@ -1025,7 +1025,7 @@ function test_decl.testHttpGet(t)
         t.env.g_step = 1
         t.env.g_req = nil
 
-        t.env.httpGet()
+        t.env.testNext()
 
         assertEqual(tc.want_req, t.env.g_req)
         assertEqual(tc.want_announce_log, t.env.server._announce_log)
