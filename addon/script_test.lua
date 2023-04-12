@@ -677,6 +677,54 @@ function test_decl.testHttpReply(t)
             },
         },
         {
+            in_g_active = true,
+            in_g_port = 52149,
+            in_g_len = 0,
+            in_g_limit = 1 << 30,
+            in_g_step = 1024,   -- !
+            in_g_req = "/?n=0",
+            in_port = 52149,
+            in_req = "/?n=0",
+            in_resp = "",
+            want_g_active = true,
+            want_g_port = 52149,
+            want_g_len = 1024,
+            want_g_limit = 1 << 30,
+            want_g_step = 1024,
+            want_g_req = "/?n=1024",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=1024",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
+            in_g_active = true,
+            in_g_port = 52149,
+            in_g_len = 1,       -- !
+            in_g_limit = 1 << 30,
+            in_g_step = 1024,   -- !
+            in_g_req = "/?n=1", -- !
+            in_port = 52149,
+            in_req = "/?n=1",   -- !
+            in_resp = ".",      -- !
+            want_g_active = true,
+            want_g_port = 52149,
+            want_g_len = 1025,
+            want_g_limit = 1 << 30,
+            want_g_step = 1024,
+            want_g_req = "/?n=1025",
+            want_announce_log = {
+                {
+                    name = "[sw-test-resplen]",
+                    message = "body_len=1025",
+                    peer_id = nil,
+                },
+            },
+        },
+        {
             in_g_active = false,    -- !
             in_g_port = 52149,
             in_g_len = 0,

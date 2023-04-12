@@ -104,7 +104,7 @@ function httpReply(port, req, resp)
         return
     end
 
-    g_len = g_len + 1
+    g_len = g_len + g_step
     testNext()
 end
 
