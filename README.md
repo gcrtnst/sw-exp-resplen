@@ -15,6 +15,7 @@ sw-test-resplen は、Stormworks の HTTP 機能で受信できるレスポン�
 - GeForce GTX 1050/PCIe/SSE2 4.6.0 NVIDIA 457.51
 - 8192MB RAM
 - Windows 10 Home 10.0 64bit
+- go version go1.20.3 windows/amd64
 - Stormworks 64-bit v1.7.2
 - シングルプレイ
 - Search and Destroy DLC 有効
