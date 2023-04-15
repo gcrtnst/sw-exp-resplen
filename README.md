@@ -32,7 +32,7 @@ sw-test-resplen は、Stormworks の HTTP 機能で受信できるレスポン�
 検証用アドオンは、HTTP サーバーに対して繰り返し HTTP リクエストを行い、最大データ長を測定します。
 
 検証用アドオンを Stormworks 上で有効化するには、下記手順に従います。
-1. 本リポジトリの `addon/test_resplen` フォルダを、`%APPDATA%\Stormworks\data\missions` にコピーします。
+1. 本リポジトリの `addon/test_resplen/` フォルダを、`%APPDATA%\Stormworks\data\missions\` にコピーします。
 1. Stormworks を起動して、"HTTP Response Length Test" アドオンを有効化したワールドを新規作成します。\
    New Game > Enabled Addons > Saved > HTTP Response Length Test
 
@@ -57,3 +57,18 @@ sw-test-resplen は、Stormworks の HTTP 機能で受信できるレスポン�
 4. データ長を `step` 引数で指定された増加値だけ増加させます。
 5. データ長が `limit` 引数で指定された終了値を超えている場合、動作を終了します。\
    そうでない場合は、2. に戻ります。
+
+### 検証用 HTTP サーバー
+検証用 HTTP サーバーは、アドオンの HTTP リクエストに応答します。
+
+検証用 HTTP サーバーは、下記の手順でビルドできます。
+1. [The Go Programming Language](https://go.dev/) をインストールします。
+1. 本リポジトリの `server/` フォルダをカレントディレクトリとして、次のコマンドを実行します。\
+   `go build -o sw-test-resplen.exe`
+
+検証用 HTTP サーバーはコンソールアプリケーションであり、コマンドの書式は以下の通りです。
+```
+sw-test-resplen.exe [-port PORT]
+```
+- `-port`：HTTP サーバーのポート番号
+  - 未指定の場合、空きポートを自動的に割り当てます。
